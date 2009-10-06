@@ -45,6 +45,7 @@ logger.level = constantize("Logger::#{loglevel.upcase}")
 Rtlog.logger = logger
 
 logger.debug("Loading config file: #{config_file}")
+config = nil
 File.open(config_file) { |file| config = YAML.load(file) }
 
 log = Rtlog::Archive.new(config)
