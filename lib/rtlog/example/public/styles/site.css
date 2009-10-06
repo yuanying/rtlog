@@ -41,16 +41,16 @@ img {
   font-size: 90%;
   display: inline;
 }
-#page .navigation .next:before {
+#page .navigation .previous:before {
   content: '« ';
 }
-#page .navigation .next {
+#page .navigation .previous {
   margin-right: 0.4em;
 }
-#page .navigation .previous {
+#page .navigation .next {
   margin-left: 0.4em;
 }
-#page .navigation .previous:after {
+#page .navigation .next:after {
   content: ' »';
 }
 

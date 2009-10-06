@@ -175,8 +175,8 @@ class MonthPage < Page
     File.expand_path( File.join(config['target_dir'], path, "index#{page}.html") )
   end
   
-  def url
-    page = current_page == 1 ? '' : "index_#{current_page}"
+  def url(page=current_page)
+    page = page == 1 ? '' : "index_#{page}"
     config['url_prefix'] + '/' + path + '/' + page
   end
   
