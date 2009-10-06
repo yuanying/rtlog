@@ -1,0 +1,22 @@
+twitter_id: yuanying
+
+url_prefix: 'http://192.168.10.8/~yuanying/lifelog'
+time_zone: Tokyo
+
+target_dir: ~/Sites/lifelog
+config_dir: ~/.lifelog/config
+temp_dir: ~/.lifelog/temp
+
+pages:
+  rss:
+    size: 7
+    template: rss.xml.erb
+  index:
+    size: 7
+    template: index.html.erb
+  month:
+    size: 7
+    template: month.html.erb
+  day:
+    template: day.html.erb
+

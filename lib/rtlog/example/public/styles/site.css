@@ -1,0 +1,82 @@
+body {
+  text-align: center;
+}
+
+img {
+  border: none;
+}
+
+.contents {
+  margin: auto;
+  text-align: left;
+}
+
+#page {
+  vertical-align: top;
+  width: 524px;
+  padding: 1em;
+}
+#page .profile h1 {
+  margin: 0;
+  position: relative;
+}
+#page .profile .profile_names {
+  position: absolute;
+  top: 0;
+  left: 80px;
+}
+#page .profile .screen_name {
+  font-size: medium;
+}
+#page .tw_posted {
+  color: #ccc;
+  border-bottom: 1px dotted #ccc;
+  padding: 0.2em 0;
+}
+#page .navigation {
+  margin: 0;
+  padding: 0;
+}
+#page .navigation li {
+  font-size: 90%;
+  display: inline;
+}
+#page .navigation .next:before {
+  content: '« ';
+}
+#page .navigation .next {
+  margin-right: 0.4em;
+}
+#page .navigation .previous {
+  margin-left: 0.4em;
+}
+#page .navigation .previous:after {
+  content: ' »';
+}
+
+#informations {
+  vertical-align: top;
+  width: 200px;
+  font-size: 90%;
+}
+#informations .info ul {
+  margin: 0;
+  padding: 0;
+}
+#informations .info li {
+  display: block;
+  margin: 0;
+  padding: 0 0 0 1em;
+}
+#informations .info {
+  padding: 0.4em;
+}
+#informations .profile dt {
+  font-weight: bold;
+}
+#informations .profile dd {
+  margin: 0;
+  padding: 0;
+  margin-left: 1em;
+}
+

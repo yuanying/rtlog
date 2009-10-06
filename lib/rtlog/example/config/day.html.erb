@@ -1,0 +1,19 @@
+<% day = self %>
+<p class='title'><%=title%>のアーカイブ</p>
+
+<div id='d_<%=day.date.strftime('%Y%m%d')%>' class='day'>
+  <h2><a href='<%=day.url%>'><%= day.date.strftime('%Y年%m月%d日(%a)')%></a></h2>
+  <% day.tweets do |tweet| %>
+  <div class='tweet' id='t_<%= tweet.id %>'>
+    <p class='tw_text'><%= tweet.formatted_text %></p>
+    <% if tweet.medias.size > 0 %>
+    <div class='media'>
+      <% tweet.medias.each do |m|%>
+      <p><a href='<%=m.url%>'><img src='<%=m.local_url%>' width='150' height='150' alt='' /></a></p>
+      <% end %>
+    </div>
+    <% end %>
+    <div class='tw_posted'>posted at <a href='<%= "http://twitter.com/#{tweet.user['screen_name']}/status/#{tweet.id}"%>' class='time'><%= tweet.created_at.strftime('%H時%M分%S秒')%></a></div>
+  </div>
+  <% end %>
+</div>

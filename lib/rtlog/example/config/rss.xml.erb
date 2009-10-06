@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://purl.org/rss/1.0/"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:admin="http://webns.net/mvcb/"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:sy="http://purl.org/rss/1.0/modules/syndication/">
+  <channel rdf:about="<%= index_url %>">
+    <title>Lifelog @ <%=h config['twitter_id']%> from twitter.com</title>
+    <link><%= index_url %></link>
+    <description>Lifelog @ <%=h config['twitter_id']%> from twitter.com</description>
+    <%#<dc:language>${blog.locale.language}</dc:language>%>
+    <dc:creator><%=h log.user['name']%></dc:creator>
+    <dc:date><%= Time.now.iso8601 %></dc:date>
+    <admin:generatorAgent rdf:resource="TwitLogger"/>
+    <items>
+      <rdf:Seq>
+      <% recent_day_pages(size).each do |day| %>
+        <rdf:li rdf:resource="<%= day.url %>" />
+      <% end %>
+      </rdf:Seq>
+    </items>
+  </channel>
+
+  <% recent_day_pages(size).each do |day| %>
+  <item rdf:about="<%= day.url %>">
+    <title><%=h day.title %></title>
+    <link><%= day.url %></link>
+    <description>Life log at <%=h day.title %></description>
+    <content:encoded><![CDATA[
+    <% day.tweets do |tweet| %>
+    <div class='tweet' id='t_<%= tweet.id %>'>
+      <p class='tw_text'><%= tweet.formatted_text %></p>
+      <% if tweet.medias.size > 0 %>
+      <div class='media'>
+        <% tweet.medias.each do |m|%>
+        <p><a href='<%=m.url%>'><img src='<%=m.local_url%>' width='150' height='150' alt='' /></a></p>
+        <% end %>
+      </div>
+      <% end %>
+      <div class='tw_posted'>posted at <a href='<%= "http://twitter.com/#{tweet.user['screen_name']}/status/#{tweet.id}"%>' class='time'><%= tweet.created_at.strftime('%H時%M分%S秒')%></a></div>
+    </div>
+    <% end %>
+    ]]></content:encoded>
+    <dc:creator><%=h log.user['name']%></dc:creator>
+    <dc:date><%= day.date.iso8601 %></dc:date>
+  </item>
+  <% end %>
+</rdf:RDF>
