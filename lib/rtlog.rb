@@ -9,9 +9,9 @@ module Rtlog
     end
     
     def root
-      RTLOG_ROOT if defined?(RTLOG_ROOT)
-      RTLOG_ROOT = File.join(File.dirname(__FILE__), '..')
-      RTLOG_ROOT
+      return RTLOG_ROOT if defined?(RTLOG_ROOT)
+      @@rtlog_root = File.join(File.dirname(__FILE__), '..')
+      return @@rtlog_root
     end
   end
 end

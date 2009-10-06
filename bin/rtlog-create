@@ -13,23 +13,25 @@ require 'logger'
 require 'rtlog/archives'
 require 'rtlog/pages'
 
+config        = {}
+
 config_file   = nil #File.join( File.dirname(__FILE__), '..', 'lib', 'rtlog', 'example', 'config', 'config.yml' )
 download_all  = false
 re_construct  = false
 loglevel      = 'warn'
-
-twitter_id    = nil
-target_dir    = nil
-config_dir    = nil
-temp_dir      = nil
-url_prefix    = 'http://localhost'
-time_zone     = 'Tokyo'
 
 opt = OptionParser.new
 opt.on('-c', '--config-file CONFIG_FILE') { |v| config_file = v }
 opt.on('-d') { |boolean| download_all = boolean }
 opt.on('-r') { |boolean| re_construct = boolean }
 opt.on("--log-level LOGLEVEL", 'fatal / error / warn / info / debug') { |v| loglevel = v }
+
+opt.on('-i', '--twitter-id TWITTER_ID') { |v| config['twitter_id'] = v }
+opt.on('-t', '--target-dir GENERATED_HTML_TARGET_DIR') { |v| config['target_dir'] = v }
+opt.on('--config-dir CONFIG_DIR') { |v| config['config_dir'] = v }
+opt.on('--temp-dir TEMP_DIR') { |v| config['temp_dir'] = v }
+opt.on('-u', '--url-prefix URL_PREFIX') { |v| config['url_prefix'] = v }
+opt.on('--time-zone TIME_ZONE') { |v| config['time_zone'] = v }
 opt.parse!
 
 def constantize(camel_cased_word)
@@ -44,9 +46,17 @@ logger = Logger.new(STDOUT)
 logger.level = constantize("Logger::#{loglevel.upcase}")
 Rtlog.logger = logger
 
-logger.debug("Loading config file: #{config_file}")
-config = nil
-File.open(config_file) { |file| config = YAML.load(file) }
+if config_file
+  logger.debug("Loading config file: #{config_file}")
+  File.open(config_file) { |file| config = YAML.load(file).update(config) }
+end
+
+## default setting
+config = {
+  'config_dir'  => '~/.lifelog/config',
+  'temp_dir'    => '~/.lifelog/temp',
+  'url_prefix'  => 'http://localhost'
+}.update(config)
 
 log = Rtlog::Archive.new(config)
 

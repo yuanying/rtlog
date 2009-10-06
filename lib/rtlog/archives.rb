@@ -341,8 +341,9 @@ class Archive
 
   def save status
     Tweet.new(config, status).medias.each do |m|
-      logger.debug("Download media: #{m.class}, #{m.id}")
+      logger.debug("Download media: #{m.class}, #{m.original_thumbnail_url}")
       m.download
+      sleep 2
     end
     date = Time.zone.parse(status['created_at'])
     date = DateTime.parse(date.to_s)

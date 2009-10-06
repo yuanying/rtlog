@@ -34,7 +34,11 @@ class Page
   def generate options={}
     options = { :layout => 'layout.html.erb' }.merge(options)
     
-    template = File.join( config_dir, options[:layout] ) if options[:layout]
+    template = nil
+    if options[:layout]
+      template = File.join( config_dir, options[:layout] ) 
+      template = File.join( Rtlog.root, 'lib', 'rtlog', 'example', 'config',  'layout.html.erb' ) unless File.exist?(template)
+    end
     template = template_path unless template
     FileUtils.mkdir_p( File.dirname(file_path) ) unless File.exist?( File.dirname(file_path) )
     open(file_path, "w") do |io|  
@@ -50,10 +54,15 @@ class Page
   end
   
   def template_path
-    @template_path ||= ::File.join(config_dir, config['pages'][page_name]['template'])
-    @template_path
-  rescue
-    @template_path = File.join( Rtlog.root, 'lib', 'rtlog', 'example', 'config', template_file_name )
+    unless defined?(@template_path)
+      @template_path = nil
+      if config['pages'] && config['pages'][page_name] && config['pages'][page_name]['template']
+        @template_path = ::File.join(config_dir, config['pages'][page_name]['template'])
+      end
+      unless @template_path && File.exist?(@template_path)
+        @template_path = File.join( Rtlog.root, 'lib', 'rtlog', 'example', 'config', template_file_name )
+      end
+    end
     @template_path
   end
   
