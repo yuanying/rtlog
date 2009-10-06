@@ -127,6 +127,11 @@ class Entry
     @date
   end
   
+  def ==(v)
+    return false if v.respond_to?(:path)
+    self.path == v.path
+  end
+  
   def logger
     defined?(@logger) ? @logger : Rtlog.logger
   end
@@ -162,7 +167,7 @@ class MonthEntry < Entry
   end
   
   def size
-    unless @size
+    unless defined?(@size) && @size
       @size = 0
       day_entries.each do |d|
         @size += d.size
@@ -249,6 +254,41 @@ class Archive
       end
     end
     @year_entries
+  end
+  
+  def previous_month_entry month_entry
+    previous_year   = nil
+    previous_month  = nil
+    year_entries.each do |y|
+      index = y.month_entries.index(month_entry)
+      if index == 0
+        if previous_year && previous_year.month_entries.size > 0
+          return previous_year.month_entries.last
+        else
+          return nil
+        end
+      elsif index
+        return y.month_entries[index-1]
+      end
+      previous_year = y
+    end
+    return nil
+  end
+  
+  def next_month_entry month_entry
+    return_next_entry = false
+    year_entries.each do |y|
+      return y.month_entries.first if return_next_entry && y.month_entries.size > 0
+      index = y.month_entries.index(month_entry)
+      if index == nil
+        next
+      elsif y.month_entries.size == (index + 1)
+        return_next_entry = true
+      else
+        return y.month_entries[index+1]
+      end
+    end
+    return nil
   end
   
   def month_entry month

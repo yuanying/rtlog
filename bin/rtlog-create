@@ -13,13 +13,20 @@ require 'logger'
 require 'rtlog/archives'
 require 'rtlog/pages'
 
-config        = File.join( File.dirname(__FILE__), '..', 'lib', 'rtlog', 'example', 'config', 'config.yml' )
+config_file   = nil #File.join( File.dirname(__FILE__), '..', 'lib', 'rtlog', 'example', 'config', 'config.yml' )
 download_all  = false
 re_construct  = false
 loglevel      = 'warn'
 
+twitter_id    = nil
+target_dir    = nil
+config_dir    = nil
+temp_dir      = nil
+url_prefix    = 'http://localhost'
+time_zone     = 'Tokyo'
+
 opt = OptionParser.new
-opt.on('-c', '--config-file CONFIG_FILE') { |v| config = v }
+opt.on('-c', '--config-file CONFIG_FILE') { |v| config_file = v }
 opt.on('-d') { |boolean| download_all = boolean }
 opt.on('-r') { |boolean| re_construct = boolean }
 opt.on("--log-level LOGLEVEL", 'fatal / error / warn / info / debug') { |v| loglevel = v }
@@ -37,8 +44,8 @@ logger = Logger.new(STDOUT)
 logger.level = constantize("Logger::#{loglevel.upcase}")
 Rtlog.logger = logger
 
-logger.debug("Loading config file: #{config}")
-File.open(config) { |file| config = YAML.load(file) }
+logger.debug("Loading config file: #{config_file}")
+File.open(config_file) { |file| config = YAML.load(file) }
 
 log = Rtlog::Archive.new(config)
 

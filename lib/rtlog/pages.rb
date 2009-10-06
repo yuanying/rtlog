@@ -25,7 +25,7 @@ class Page
   end
   
   def parse file_name
-    logger.debug("Template parsing: #{file_name}")
+    # logger.debug("Template parsing: #{file_name}")
     open(file_name) { |io| ERB.new( io.read ) }.result(binding)
   rescue => ex
     "<p>#{h(ex.to_s)}</p><pre class='error'>#{ex.backtrace.map{|m| h(m) }.join('<br />')}</pre>"
@@ -168,6 +168,24 @@ class MonthPage < Page
     next_page = self.clone
     next_page.current_page += 1
     next_page
+  end
+  
+  def next_month_page
+    unless defined?(@next_month_page)
+      month = log.next_month_entry(self.month_entry)
+      return nil unless month
+      @next_month_page = MonthPage.new(config, log, month)
+    end
+    @next_month_page
+  end
+  
+  def previous_month_page
+    unless defined?(@previous_month_page)
+      month = log.previous_month_entry(self.month_entry)
+      return nil unless month
+      @previous_month_page = MonthPage.new(config, log, month)
+    end
+    @previous_month_page
   end
   
   def file_path

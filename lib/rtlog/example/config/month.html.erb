@@ -1,10 +1,18 @@
-
-<p class='title'><%=title%>のアーカイブ</p>
-
 <%
 previous_page = previous
 next_page = self.next
 %>
+
+<ul class='navigation'>
+  <% if previous_month_page %>
+  <li class='previous'><a href='<%=previous_month_page.url%>'><%=previous_month_page.title%></a></li>
+  <% end %>
+  <li class='title'><%=title%>のアーカイブ</li>
+  <% if next_month_page %>
+  <li class='next'><a href='<%=next_month_page.url%>'><%=next_month_page.title%></a></li>
+  <% end %>
+</ul>
+
 <% if previous_page || next_page %>
 <ul class='navigation'>
   <% if previous_page %>
