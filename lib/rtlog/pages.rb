@@ -45,11 +45,21 @@ class Page
   
   def size
     config['pages'][page_name]['size'] || 7
+  rescue
+    7
   end
   
   def template_path
     @template_path ||= ::File.join(config_dir, config['pages'][page_name]['template'])
     @template_path
+  rescue
+    @template_path = File.join( Rtlog.root, 'lib', 'rtlog', 'example', 'config', template_file_name )
+    @template_path
+  end
+  
+  def template_file_name
+    class_name = self.class.name.split('::').last.gsub('Page', '').downcase
+    "#{class_name}.html.erb"
   end
   
   def month_pages
@@ -109,6 +119,10 @@ class RssPage < IndexPage
   
   def generate
     super(:layout => nil)
+  end
+  
+  def template_file_name
+    'rss.xml.erb'
   end
 end
 
