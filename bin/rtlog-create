@@ -1,4 +1,92 @@
 #!/usr/bin/env ruby -wKU
 
+RTLOG_ROOT = File.join(File.dirname(__FILE__), '..')
 
+$:.insert(0, *[
+  File.join(RTLOG_ROOT, 'lib')
+])
 
+require 'rubygems'
+require 'optparse'
+require 'yaml'
+require 'logger'
+require 'rtlog/archives'
+require 'rtlog/pages'
+
+config        = File.join( File.dirname(__FILE__), '..', 'lib', 'rtlog', 'example', 'config', 'config.yml' )
+download_all  = false
+re_construct  = false
+loglevel      = 'warn'
+
+opt = OptionParser.new
+opt.on('-c', '--config-file CONFIG_FILE') { |v| config = v }
+opt.on('-d') { |boolean| download_all = boolean }
+opt.on('-r') { |boolean| re_construct = boolean }
+opt.on("--log-level LOGLEVEL", 'fatal / error / warn / info / debug') { |v| loglevel = v }
+opt.parse!
+
+def constantize(camel_cased_word)
+  unless /\A(?:::)?([A-Z]\w*(?:::[A-Z]\w*)*)\z/ =~ camel_cased_word
+    raise NameError, "#{camel_cased_word.inspect} is not a valid constant name!"
+  end
+
+  Object.module_eval("::#{$1}", __FILE__, __LINE__)
+end
+
+logger = Logger.new(STDOUT)
+logger.level = constantize("Logger::#{loglevel.upcase}")
+Rtlog.logger = logger
+
+logger.debug("Loading config file: #{config}")
+File.open(config) { |file| config = YAML.load(file) }
+
+log = Rtlog::Archive.new(config)
+
+update_months = []
+update_days   = []
+if log.recent_entry_id == nil || download_all
+  log.download_all
+  download_all = true
+else
+  log.download( 'count' => 200, 'since_id' => log.recent_entry_id ) do |tweet|
+    tweet = Rtlog::Tweet.new(config, tweet)
+    month = [tweet.created_at.year, tweet.created_at.month]
+    update_months << month unless update_months.include?(month)
+    day   = [tweet.created_at.year, tweet.created_at.month, tweet.created_at.day]
+    update_days   << day   unless update_days.include?(day)
+  end
+end
+
+if re_construct || download_all || (update_months.size > 0)
+  index = Rtlog::IndexPage.new(config, log)
+  index.generate
+  rss   = Rtlog::RssPage.new(config, log)
+  rss.generate
+end
+
+if re_construct || download_all
+  index.month_pages.each do |month|
+    begin
+      month.generate
+      month.current_day_pages.each do |day|
+        day.generate
+      end
+    end while month = month.next
+  end
+else
+  update_months.each do |month|
+    month = Time.zone.local(*month)
+    month_entry = log.month_entry(month)
+    month_page = Rtlog::MonthPage.new(config, log, month_entry)
+    begin
+      month_page.generate
+    end while month_page = month_page.next
+  end
+  
+  update_days.each do |day|
+    day = Time.zone.local(*day)
+    day_entry = log.day_entry(day)
+    day_page = Rtlog::DayPage.new(config, log, day_entry)
+    day_page.generate
+  end
+end

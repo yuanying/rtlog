@@ -7,7 +7,7 @@
 <meta http-equiv="content-script-type" content="text/javascript" />
 
 <title><%=h title %> -- Lifelog @ <%=h config['twitter_id']%> from twitter.com</title>
-<link rel="alternate" type="application/rss+xml" title="<%=h title %> -- Lifelog @ <%=config['twitter_id']%> from twitter.com" href="<%=Twitter::Log::RssPage.new(config, log).url%>" /> 
+<link rel="alternate" type="application/rss+xml" title="<%=h title %> -- Lifelog @ <%=config['twitter_id']%> from twitter.com" href="<%=Rtlog::RssPage.new(config, log).url%>" /> 
 <link rel="stylesheet" href="<%=config['url_prefix']%>/styles/site.css" type="text/css" media="screen, projection" /> 
 <style type="text/css">
 body {

@@ -7,14 +7,15 @@ require 'json/pure'
 require 'open-uri'
 require 'erb'
 
+module Rtlog
 
-module Rtlog::DirUtils
+module DirUtils
   def entries(path)
     Dir.entries(path).delete_if{|d| !(/\d+/ =~ d) }.reverse.map!{ |file| File.join(path, file) }
   end
 end
 
-class Rtlog::TwitPic
+class TwitPic
   TWIT_REGEXP = /http\:\/\/twitpic\.com\/([0-9a-zA-Z]+)/
   
   attr_reader :id
@@ -56,8 +57,8 @@ class Rtlog::TwitPic
   end
 end
 
-class Rtlog::Tweet
-  include Rtlog::DirUtils
+class Tweet
+  include DirUtils
   include ERB::Util
   attr_reader :data
   attr_reader :config
@@ -93,7 +94,7 @@ class Rtlog::Tweet
   end
   
   def medias
-    unless @medias
+    unless defined?(@medias) && @medias
       @medias = []
       text.gsub(TwitPic::TWIT_REGEXP) do |m|
         @medias << TwitPic.new(config, m)
@@ -107,14 +108,16 @@ class Rtlog::Tweet
   end
 end
 
-class Rtlog::Entry
-  include Rtlog::DirUtils
+class Entry
+  include DirUtils
   attr_reader :config
   attr_reader :path
+  attr_writer :logger
   
   def initialize config, path
     @config = config
     @path   = path
+    @date   = nil
   end
   
   def date
@@ -123,9 +126,13 @@ class Rtlog::Entry
     end
     @date
   end
+  
+  def logger
+    defined?(@logger) ? @logger : Rtlog.logger
+  end
 end
 
-class Rtlog::DayEntry < Rtlog::Entry
+class DayEntry < Entry
   def tweets
     entries(@path).each do |path|
       yield Tweet.new(config, path)
@@ -142,10 +149,10 @@ class Rtlog::DayEntry < Rtlog::Entry
   end
 end
 
-class Rtlog::MonthEntry < Rtlog::Entry
+class MonthEntry < Entry
   
   def day_entries
-    unless @day_entries
+    unless defined?(@day_entries) && @day_entries
       @day_entries = []
       entries(@path).each do |path|
         @day_entries << DayEntry.new(config, path)
@@ -170,10 +177,10 @@ class Rtlog::MonthEntry < Rtlog::Entry
   end
 end
 
-class Rtlog::YearEntry < Rtlog::Entry
+class YearEntry < Entry
   
   def month_entries
-    unless @month_entries
+    unless defined?(@month_entries) && @month_entries
       @month_entries = []
       entries(@path).each do |path|
         @month_entries << MonthEntry.new(config, path)
@@ -188,15 +195,21 @@ class Rtlog::YearEntry < Rtlog::Entry
   end
 end
 
-class Rtlog::Archive
-  include Rtlog::DirUtils
+class Archive
+  include DirUtils
 
   attr_accessor :config
+  attr_writer :logger
 
   def initialize config
-    @config   = config
-    @tw       = Rubytter.new
-    Time.zone = @config['time_zone'] || user_info.time_zone
+    @config       = config
+    @tw           = Rubytter.new
+    @year_entries = nil
+    Time.zone     = @config['time_zone'] || user_info.time_zone
+  end
+  
+  def logger
+    defined?(@logger) ? @logger : Rtlog.logger
   end
   
   def user_info
@@ -214,7 +227,7 @@ class Rtlog::Archive
   end
   
   def recent_day_entries size=7
-    unless @recent_day_entries
+    unless defined?(@recent_day_entries) && @recent_day_entries
       @recent_day_entries = []
       year_entries.each do |y|
         y.month_entries.each do |m|
@@ -288,6 +301,7 @@ class Rtlog::Archive
 
   def save status
     Tweet.new(config, status).medias.each do |m|
+      logger.debug("Download media: #{m.class}, #{m.id}")
       m.download
     end
     date = Time.zone.parse(status['created_at'])
@@ -296,8 +310,11 @@ class Rtlog::Archive
     path = "#{temp_dir}/#{date.strftime('%Y/%m/%d')}/#{status['id']}.json"
     FileUtils.mkdir_p( File.dirname(path) ) unless File.exist?( File.dirname(path) )
     File.open(path, "w") { |file| file.write(status.to_json) }
+    logger.debug("Tweet is saved: #{path}")
   end
   
+end
+
 end
 
 

@@ -2,16 +2,22 @@ require 'rtlog'
 require 'erb'
 require 'fileutils'
 
+module Rtlog
 
-class Rtlog::Page
+class Page
   include ERB::Util
   
   attr_reader :config
   attr_reader :log
+  attr_writer :logger
   
   def initialize config, log
     @config = config
     @log    = log
+  end
+  
+  def logger
+    defined?(@logger) ? @logger : Rtlog.logger
   end
   
   def config_dir
@@ -19,6 +25,7 @@ class Rtlog::Page
   end
   
   def parse file_name
+    logger.debug("Template parsing: #{file_name}")
     open(file_name) { |io| ERB.new( io.read ) }.result(binding)
   rescue => ex
     "<p>#{h(ex.to_s)}</p><pre class='error'>#{ex.backtrace.map{|m| h(m) }.join('<br />')}</pre>"
@@ -33,6 +40,7 @@ class Rtlog::Page
     open(file_path, "w") do |io|  
       io.write(parse(template))
     end
+    logger.debug("#{self.class} is generated: #{file_path}")
   end
   
   def size
@@ -40,7 +48,7 @@ class Rtlog::Page
   end
   
   def template_path
-    @template_path ||= File.join(config_dir, config['pages'][page_name]['template'])
+    @template_path ||= ::File.join(config_dir, config['pages'][page_name]['template'])
     @template_path
   end
   
@@ -59,7 +67,7 @@ class Rtlog::Page
   end
 end
 
-class Rtlog::IndexPage < Rtlog::Page
+class IndexPage < Page
   
   def title
     'Index'
@@ -86,7 +94,7 @@ class Rtlog::IndexPage < Rtlog::Page
   end
 end
 
-class Rtlog::RssPage < Rtlog::IndexPage
+class RssPage < IndexPage
   def url
     config['url_prefix'] + '/feed/rss'
   end
@@ -104,7 +112,7 @@ class Rtlog::RssPage < Rtlog::IndexPage
   end
 end
 
-class Rtlog::MonthPage < Rtlog::Page
+class MonthPage < Page
   attr_reader :month_entry
   attr_accessor :current_page
   
@@ -182,7 +190,7 @@ class Rtlog::MonthPage < Rtlog::Page
   end
 end
 
-class Rtlog::DayPage < Rtlog::Page
+class DayPage < Page
   attr_reader :day_entry
   
   def initialize config, log, day_entry
@@ -221,5 +229,7 @@ class Rtlog::DayPage < Rtlog::Page
   def path
     day_entry.date.strftime('%Y/%m/%d')
   end
+end
+
 end
 
