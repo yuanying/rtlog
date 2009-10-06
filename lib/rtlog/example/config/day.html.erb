@@ -1,5 +1,7 @@
 <% day = self %>
-<p class='title'><%=title%>のアーカイブ</p>
+<ul class='navigation'>
+  <li class='title'><%=title%>のアーカイブ</li>
+</ul>
 
 <div id='d_<%=day.date.strftime('%Y%m%d')%>' class='day'>
   <h2><a href='<%=day.url%>'><%= day.date.strftime('%Y年%m月%d日(%a)')%></a></h2>
