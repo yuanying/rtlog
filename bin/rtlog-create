@@ -53,7 +53,7 @@ end
 
 ## default setting
 config = {
-  'target_dir'  => './lifelog'
+  'target_dir'  => './lifelog',
   'config_dir'  => '~/.lifelog/config',
   'temp_dir'    => '~/.lifelog/temp',
   'url_prefix'  => 'http://localhost'
