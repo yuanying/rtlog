@@ -60,6 +60,9 @@ spec = Gem::Specification.new do |s|
   s.autorequire       = ""
   s.test_files        = Dir["test/test_*.rb"]
 
+  s.add_dependency('activesupport', '>=2.3.4')
+  s.add_dependency('json_pure', '>=1.1.9')
+  s.add_dependency('rubytter', '>=0.8.0')
   #s.add_dependency('activesupport', '>=1.3.1')
   #s.required_ruby_version = '>= 1.8.2'
 
