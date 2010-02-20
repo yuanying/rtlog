@@ -11,24 +11,24 @@
 <style type="text/css">
 body {
   text-align: center;
-  background-color:#<%=log.user['profile_background_color']%>;
-  <% if log.user['profile_background_tile'] == false %>
+  background-color:#<%=log.user.profile_background_color%>;
+  <% if log.user.profile_background_tile == false %>
   background-repeat: no-repeat;
   <% end %>
   background-attachment: fixed;
   background-position: left top;
-  background-image: url(<%=log.user['profile_background_image_url']%>);
-  color: #<%=log.user['profile_text_color']%>;
+  background-image: url(<%=log.user.profile_background_image_url%>);
+  color: #<%=log.user.profile_text_color%>;
   font-family: sans-serif;
 }
 img {
   border: none;
 }
-a:link { text-decoration:none; color:#<%=log.user['profile_link_color']%>;}
-a:visited { text-decoration:none; color:#<%=log.user['profile_link_color']%>;}
-a:hover { text-decoration:underline; color:#<%=log.user['profile_link_color']%>;}
+a:link { text-decoration:none; color:#<%=log.user.profile_link_color%>;}
+a:visited { text-decoration:none; color:#<%=log.user.profile_link_color%>;}
+a:hover { text-decoration:underline; color:#<%=log.user.profile_link_color%>;}
 .contents {
-  background-color: #<%=log.user['profile_sidebar_border_color']%>;
+  background-color: #<%=log.user.profile_sidebar_border_color%>;
   margin: auto;
   text-align: left;
 }
@@ -79,23 +79,23 @@ a:hover { text-decoration:underline; color:#<%=log.user['profile_link_color']%>;
   padding: 1em 0;
 }
 #page .day h2 {
-  border-top: 1px solid #<%=log.user['profile_sidebar_border_color']%>;
-  border-bottom: 1px solid #<%=log.user['profile_sidebar_border_color']%>;
-  background-color: #<%=log.user['profile_sidebar_fill_color']%>;
+  border-top: 1px solid #<%=log.user.profile_sidebar_border_color%>;
+  border-bottom: 1px solid #<%=log.user.profile_sidebar_border_color%>;
+  background-color: #<%=log.user.profile_sidebar_fill_color%>;
   margin: 0;
   padding: 0.2em 0.3em;
 }
 #page .day h2 a {
-  color: #<%=log.user['profile_text_color']%>;
+  color: #<%=log.user.profile_text_color%>;
 }
 #informations {
-  background-color: #<%=log.user['profile_sidebar_fill_color']%>;
+  background-color: #<%=log.user.profile_sidebar_fill_color%>;
   vertical-align: top;
   width: 200px;
   font-size: 90%;
 }
 #informations h2 {
-  border-bottom: 1px dotted #<%=log.user['profile_sidebar_border_color']%>;
+  border-bottom: 1px dotted #<%=log.user.profile_sidebar_border_color%>;
 }
 #informations .info ul {
   margin: 0;
@@ -128,12 +128,12 @@ a:hover { text-decoration:underline; color:#<%=log.user['profile_link_color']%>;
 <div class="profile">
   <h1>
     <a href='<%=index_url%>'>
-      <img src='<%=log.user['profile_image_url'].gsub('_nomal', '_bigger')%>' width='73' height='73' alt='profile image' />
+      <img src='<%=log.user.profile_image_url.gsub('_nomal', '_bigger')%>' width='73' height='73' alt='profile image' />
     </a>
     <span class='profile_names'>
-      <span class='name'><%=h log.user['name']%></span>
+      <span class='name'><%=h log.user.name%></span>
       <span class='screen_name'>
-        (<a href='http://twitter.com/<%=h log.user['screen_name']%>'><%=h log.user['screen_name']%></a>)
+        (<a href='http://twitter.com/<%=h log.user.screen_name%>'><%=h log.user.screen_name%></a>)
       </span>
     </span>
   </h1>
@@ -147,13 +147,13 @@ a:hover { text-decoration:underline; color:#<%=log.user['profile_link_color']%>;
     <div class='section'>
       <dl class='profile'>
         <dt>名前</dt>
-        <dd><%=h log.user['name']%></dd>
+        <dd><%=h log.user.name%></dd>
         <dt>現在地</dt>
-        <dd><%=h log.user['location']%></dd>
+        <dd><%=h log.user.location%></dd>
         <dt>Web</dt>
-        <dd><a href='<%=log.user['url']%>'><%=log.user['url'][0, 16]%>...</a></dd>
+        <dd><a href='<%=log.user.url%>'><%=log.user.url[0, 16]%>...</a></dd>
         <dt>自己紹介</dt>
-        <dd><%=h log.user['description']%></dd>
+        <dd><%=h log.user.description%></dd>
       </dl>
     </div>
   </div>

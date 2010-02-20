@@ -11,7 +11,7 @@
     <link><%= index_url %></link>
     <description>Lifelog @ <%=h config['twitter_id']%> from twitter.com</description>
     <%#<dc:language>${blog.locale.language}</dc:language>%>
-    <dc:creator><%=h log.user['name']%></dc:creator>
+    <dc:creator><%=h log.user.name%></dc:creator>
     <dc:date><%= Time.now.iso8601 %></dc:date>
     <admin:generatorAgent rdf:resource="TwitLogger"/>
     <items>
@@ -43,7 +43,7 @@
     </div>
     <% end %>
     ]]></content:encoded>
-    <dc:creator><%=h log.user['name']%></dc:creator>
+    <dc:creator><%=h log.user.name%></dc:creator>
     <dc:date><%= day.date.iso8601 %></dc:date>
   </item>
   <% end %>
