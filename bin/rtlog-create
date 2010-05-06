@@ -32,6 +32,10 @@ opt.on('--config-dir CONFIG_DIR') { |v| config['config_dir'] = v }
 opt.on('--temp-dir TEMP_DIR') { |v| config['temp_dir'] = v }
 opt.on('-u', '--url-prefix URL_PREFIX') { |v| config['url_prefix'] = v }
 opt.on('--time-zone TIME_ZONE') { |v| config['time_zone'] = v }
+opt.on('--consumer-key CONSUMER_KEY') { |v| config['consumer-key'] = v }
+opt.on('--consumer-secret CONSUMER_SECRET') { |v| config['consumer-secret'] = v }
+opt.on('--access-token ACCESS_TOKEN') { |v| config['access-token'] = v }
+opt.on('--access-token-secret ACCESS_TOKEN_SECRET') { |v| config['access-token-secret'] = v }
 opt.parse!
 
 def constantize(camel_cased_word)

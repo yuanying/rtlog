@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'rtlog'
+require 'oauth'
 require 'rubytter'
 require 'active_support'
 require 'fileutils'
@@ -208,7 +209,20 @@ class Archive
 
   def initialize config
     @config       = config
-    @tw           = Rubytter.new
+    unless config['consumer-key'] && config['consumer-secret'] && config['access-token'] && config['access-token-secret']
+      raise 'OAuth settings is not found: consumer-key/consumer-secret/access-token/access-token-secret'
+    end
+    consumer = OAuth::Consumer.new(
+      config['consumer-key'],
+      config['consumer-secret'],
+      :site => 'http://twitter.com'
+    )
+    access_token = OAuth::AccessToken.new(
+      consumer,
+      config['access-token'],
+      config['access-token-secret']
+    )
+    @tw           = OAuthRubytter.new(access_token)
     @year_entries = nil
     Time.zone     = @config['time_zone'] || user_info.time_zone
   end
