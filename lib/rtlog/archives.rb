@@ -209,20 +209,25 @@ class Archive
 
   def initialize config
     @config       = config
-    unless config['consumer-key'] && config['consumer-secret'] && config['access-token'] && config['access-token-secret']
-      raise 'OAuth settings is not found: consumer-key/consumer-secret/access-token/access-token-secret'
+    if config['twitter_id'] && config['twitter_password']
+      @tw = Rubytter.new(config['twitter_id'], config['twitter_password'])
+    else
+      unless config['consumer-key'] && config['consumer-secret'] && config['access-token'] && config['access-token-secret']
+        raise 'OAuth settings is not found: consumer-key/consumer-secret/access-token/access-token-secret'
+      end
+      consumer = OAuth::Consumer.new(
+        config['consumer-key'],
+        config['consumer-secret'],
+        :site => 'http://twitter.com'
+      )
+      access_token = OAuth::AccessToken.new(
+        consumer,
+        config['access-token'],
+        config['access-token-secret']
+      )
+      @tw = OAuthRubytter.new(access_token)
     end
-    consumer = OAuth::Consumer.new(
-      config['consumer-key'],
-      config['consumer-secret'],
-      :site => 'http://twitter.com'
-    )
-    access_token = OAuth::AccessToken.new(
-      consumer,
-      config['access-token'],
-      config['access-token-secret']
-    )
-    @tw           = OAuthRubytter.new(access_token)
+
     @year_entries = nil
     Time.zone     = @config['time_zone'] || user_info.time_zone
   end

@@ -27,6 +27,7 @@ opt.on('-r') { |boolean| re_construct = boolean }
 opt.on("--log-level LOGLEVEL", 'fatal / error / warn / info / debug') { |v| loglevel = v }
 
 opt.on('-i', '--twitter-id TWITTER_ID') { |v| config['twitter_id'] = v }
+opt.on('-p', '--twitter-password TWITTER_PASSWORD') { |v| config['twitter_password'] = v }
 opt.on('-t', '--target-dir GENERATED_HTML_TARGET_DIR') { |v| config['target_dir'] = v }
 opt.on('--config-dir CONFIG_DIR') { |v| config['config_dir'] = v }
 opt.on('--temp-dir TEMP_DIR') { |v| config['temp_dir'] = v }
