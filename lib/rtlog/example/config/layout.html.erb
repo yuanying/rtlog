@@ -9,6 +9,9 @@
 <title><%=h title %> -- Lifelog @ <%=h config['twitter_id']%> from twitter.com</title>
 <link rel="alternate" type="application/rss+xml" title="<%=h title %> -- Lifelog @ <%=config['twitter_id']%> from twitter.com" href="<%=Rtlog::RssPage.new(config, log).url%>" /> 
 <style type="text/css">
+* {
+  word-break: normal !important; word-wrap: break-word;
+}
 body {
   text-align: center;
   background-color:#<%=log.user.profile_background_color%>;
