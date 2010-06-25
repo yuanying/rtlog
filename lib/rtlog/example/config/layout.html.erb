@@ -28,15 +28,18 @@ a:link { text-decoration:none; color:#<%=log.user.profile_link_color%>;}
 a:visited { text-decoration:none; color:#<%=log.user.profile_link_color%>;}
 a:hover { text-decoration:underline; color:#<%=log.user.profile_link_color%>;}
 .contents {
-  background-color: #<%=log.user.profile_sidebar_border_color%>;
+  border-collapse: collapse;
+  /*background-color: #<%=log.user.profile_sidebar_border_color%>;*/
   margin: auto;
   text-align: left;
 }
 #page {
+  border-top-left-radius: 5px; -webkit-border-top-left-radius: 5px; -moz-border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px; -webkit-border-bottom-left-radius: 5px; -moz-border-bottom-left-radius: 5px;
   background-color: #fff;
   vertical-align: top;
-  width: 524px;
-  padding: 1em;
+  width: 508px;
+  padding: 32px;
 }
 #page .profile h1 {
   margin: 0;
@@ -79,23 +82,27 @@ a:hover { text-decoration:underline; color:#<%=log.user.profile_link_color%>;}
   padding: 1em 0;
 }
 #page .day h2 {
-  border-top: 1px solid #<%=log.user.profile_sidebar_border_color%>;
-  border-bottom: 1px solid #<%=log.user.profile_sidebar_border_color%>;
-  background-color: #<%=log.user.profile_sidebar_fill_color%>;
+  color: #ccc;
+  border: 1px solidt #eee;
+  border-radius: 5px; -webkit-border-radius: 5px; -moz-border-radius: 5px;
+  background-color: #f6f6f6;
   margin: 0;
-  padding: 0.2em 0.3em;
+  padding: 0.3em;
 }
 #page .day h2 a {
   color: #<%=log.user.profile_text_color%>;
 }
 #informations {
+  border-left: 1px solid #<%=log.user.profile_sidebar_border_color%>;
+  border-top-right-radius: 5px; -webkit-border-top-right-radius: 5px; -moz-border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px; -webkit-border-bottom-right-radius: 5px; -moz-border-bottom-right-radius: 5px;
   background-color: #<%=log.user.profile_sidebar_fill_color%>;
   vertical-align: top;
   width: 200px;
   font-size: 90%;
 }
 #informations h2 {
-  border-bottom: 1px dotted #<%=log.user.profile_sidebar_border_color%>;
+  border-bottom: 1px solid #<%=log.user.profile_sidebar_border_color%>;
 }
 #informations .info ul {
   margin: 0;
@@ -107,7 +114,7 @@ a:hover { text-decoration:underline; color:#<%=log.user.profile_link_color%>;}
   padding: 0 0 0 1em;
 }
 #informations .info {
-  padding: 0.4em;
+  padding: 1em;
 }
 #informations .profile dt {
   font-weight: bold;
