@@ -8,6 +8,14 @@ require 'json/pure'
 require 'open-uri'
 require 'erb'
 
+class Rubytter
+  def create_request(req, basic_auth = true)
+    @header.each {|k, v| req.add_field(k, v) }
+    req.basic_auth(@login, @password) if @login && @password
+    req
+  end
+end
+
 module Rtlog
 
 module DirUtils
@@ -211,10 +219,7 @@ class Archive
     @config       = config
     if config['twitter_id'] && config['twitter_password']
       @tw = Rubytter.new(config['twitter_id'], config['twitter_password'])
-    else
-      unless config['consumer-key'] && config['consumer-secret'] && config['access-token'] && config['access-token-secret']
-        raise 'OAuth settings is not found: consumer-key/consumer-secret/access-token/access-token-secret'
-      end
+    elsif config['consumer-key'] && config['consumer-secret'] && config['access-token'] && config['access-token-secret']
       consumer = OAuth::Consumer.new(
         config['consumer-key'],
         config['consumer-secret'],
@@ -226,6 +231,8 @@ class Archive
         config['access-token-secret']
       )
       @tw = OAuthRubytter.new(access_token)
+    else
+      @tw = Rubytter.new
     end
 
     @year_entries = nil
