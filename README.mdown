@@ -9,6 +9,7 @@ Installation
 Rtlog is a collection of Ruby scripts, so a Ruby interpreter is required
 (tested with 1.8.7), and the following gems:
 
+-   oauth
 -   rubytter
 -   activesupport
 -   json\_pure
@@ -25,11 +26,13 @@ Rtlog is a collection of Ruby scripts, so a Ruby interpreter is required
     $ rtlog-create\
       --log-level debug\
       -i yuanying\
+      -p password\
       -t '~/Sites/lifelog'\
       -u 'http://192.168.10.8/~yuanying/lifelog'\
       --temp-dir '~/.lifelog/temp'
 
 -   -i: twitter account id
+-   -p: twitter account password
 -   -t: target directory for generated html
 -   -u: url prefix on generated html
 -   --temp-dir: temporary directory for downloaded tweets
@@ -41,7 +44,7 @@ Rtlog is a collection of Ruby scripts, so a Ruby interpreter is required
 ### Copyright
 
 -   Author::    yuanying <yuanying at fraction dot jp>
--   Copyright:: Copyright (c) 2009 yuanying
+-   Copyright:: Copyright (c) 2009-2010 yuanying
 
 ### LICENSE
 
