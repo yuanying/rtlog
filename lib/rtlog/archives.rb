@@ -4,6 +4,7 @@ require 'oauth'
 require 'rubytter'
 require 'active_support'
 require 'active_support/time'
+require 'active_support/json'
 require 'fileutils'
 require 'json/pure'
 require 'open-uri'
@@ -77,7 +78,7 @@ class Tweet
     @config = config
     if path_or_data.is_a?(String)
       open(path_or_data) do |io|
-        @data = JSON.parse(io.read)
+        @data = ActiveSupport::JSON.decode(io.read)
       end
     else
       @data = path_or_data
@@ -346,7 +347,7 @@ class Archive
     return false if timeline.last.id == option['max_id']
 
     timeline.each do |status|
-      status = JSON.parse(status.to_json)
+      status = ActiveSupport::JSON.decode(status.to_json)
       save status
       yield status if block_given?
     end
