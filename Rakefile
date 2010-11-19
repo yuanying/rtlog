@@ -19,7 +19,7 @@ DESCRIPTION       = ""
 RUBYFORGE_PROJECT = "rtlog"
 HOMEPATH          = "http://#{RUBYFORGE_PROJECT}.rubyforge.org"
 BIN_FILES         = %w( rtlog-create )
-VERS              = "0.1.1"
+VERS              = "0.1.2"
 
 REV = File.read(".svn/entries")[/committed-rev="(d+)"/, 1] rescue nil
 CLEAN.include ['**/.*.sw?', '*.gem', '.config']

@@ -6,7 +6,6 @@ require 'active_support'
 require 'active_support/time'
 require 'active_support/json'
 require 'fileutils'
-require 'json/pure'
 require 'open-uri'
 require 'erb'
 
