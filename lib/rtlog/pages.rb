@@ -72,10 +72,12 @@ class Page
   end
   
   def month_pages
-    @month_pages = []
-    log.year_entries.each do |y|
-      y.month_entries.each do |m|
-        @month_pages << MonthPage.new(config, log, m)
+    unless defined?(@month_pages)
+      @month_pages = []
+      log.year_entries.each do |y|
+        y.month_entries.each do |m|
+          @month_pages << MonthPage.new(config, log, m)
+        end
       end
     end
     @month_pages

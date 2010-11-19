@@ -133,7 +133,7 @@ class Entry
   
   def date
     unless @date
-      @date = Time.zone.local( *path.split('/').last(date_split_size) )
+      @date = Time.zone.local( *path.split('/').last(date_split_size).collect{|v| v.to_i } )
     end
     @date
   end
